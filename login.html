@@ -63,7 +63,7 @@
         }
 
         function sendToGoogleSheet(userId, name, picture) {
-            $.post('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX', { userId: userId, name: name, picture: picture })
+            $.post('https://script.google.com/macros/s/AKfycbz66lNPFhVtBcaoD2M1ZXBM5uFzAyqeqGd8ThhUTsrn-F1EUWVMuFfuSgqs8LU8Mb68/exec', { userId: userId, name: name, picture: picture })
             .done(function(response) {
                 if (response.statusCode === 200) {
                     const flexMessage = JSON.parse(response.body);
