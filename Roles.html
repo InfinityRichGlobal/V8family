@@ -3,26 +3,42 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-  <title>เลือก Rich Menu</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
+  <style type="text/css">
     body {
-      font-family: 'line_seed_sans_th';
-      background-color: #f9fafb;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      margin-bottom: 1rem;
+    }
+    .button {
+      background-color: #1DB446;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      margin: 0.5rem;
+    }
+    .button:hover {
+      background-color: #17BF63;
     }
   </style>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <title>เลือก Rich Menu</title>
 </head>
-<body class="flex items-center justify-center h-screen">
-  <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md">
-    <h1 class="text-2xl font-bold mb-6 text-center text-gray-800">เลือก Rich Menu</h1>
-    <div id="menu-container" class="flex flex-col space-y-4">
-      <!-- Rich Menu options will be populated here -->
-    </div>
+<body>
+  <div>
+    <h1>เลือก Rich Menu</h1>
+    <div id="menu-container"></div>
   </div>
-
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <script>
     $(document).ready(function () {
       var liffId = "2006070736-V67dNzeA"; // Change this to your LIFF ID
@@ -47,10 +63,11 @@
 
     function loadRichMenuOptions() {
       $.get('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', function(data) {
-        const menus = JSON.parse(data);
+        const response = JSON.parse(data);
+        const menus = response.menus;
         const container = $('#menu-container');
-        for (const menuName in menus) {
-          container.append(`<button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors" onclick="selectMenu('${menuName}')">${menuName}</button>`);
+        for (const menuName of menus) {
+          container.append(`<button class="button" onclick="selectMenu('${menuName}')">${menuName}</button>`);
         }
       });
     }
