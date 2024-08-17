@@ -51,7 +51,7 @@
             padding: 1rem;
             margin: 0 10px;
             border-radius: 13px;
-            max-width: 100%;
+            max-width: 90%;
             margin: auto;
         }
 
@@ -127,6 +127,15 @@
             opacity: 1;
             visibility: visible;
         }
+        
+                .custom-image {
+
+            border-radius: 15px;
+
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        
     </style>
 </head>
 
@@ -137,10 +146,9 @@
     </button>
     <center>
         <br />
-        <img src="https://iili.io/JZIderN.gif" style="width:200px; height:auto; padding-bottom: 10px;">
+        <img src="https://lh3.googleusercontent.com/d/1gi2oy0zl4d3c2FJbdRGzX1K_4K0wTQf1" style="width:600px; height:auto;  "class="custom-image" alt="Custom Image">
         <div class="form-group mb-2">
             <label for="searchtext">
-                <h3>ระบบลงทะเบียน</h3>
             </label>
         </div>
     </center>
@@ -149,30 +157,29 @@
         <form id="myForm" class="needs-validation" novalidate>
             <div class="row justify-content-start g-3">
                 <div class="col-12">
-                    <label for="obj1"><i class="fa-solid fa-book-reader"></i> หลักสูตร</label>
+                    <label for="obj1"><i class="fa-solid fa-award"></i> ยินดีต้อนรับสมาชิกทุกท่าน</label>
                     <select id="obj1" name="obj1" class="form-control" required>
-                        <option value="">โปรดเลือกหลักสูตร</option>
-                        <option value="หลักสูตรทดสอบ">หลักสูตรทดสอบ</option>
-                        <option value="หลักสูตรทดสอบ2">หลักสูตรทดสอบ2</option>
-                        <option value="หลักสูตรทดสอบ3">หลักสูตรทดสอบ3</option>
+
+                        <option value="หลักสูตรทดสอบ">เข้าสู่ ครอบครัวครูส้มโอ ส่งออก AEC</option>
+                        
                         <!-- เพิ่ม option ตามหลักสูตรที่ต้องการ -->
                     </select>
                     <div class="invalid-feedback">
-                        โปรดเลือกหลักสูตร
+                        
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="obj2"><i class="fa-solid fa-list-ol"></i> เลขที่</label>
-                    <input type="text" id="obj2" name="obj2" class="form-control" placeholder="เช่น 101 , 202 , 303 , 404" required>
+                    <label for="obj2"><i class="fa-solid fa-users-line"></i> กรุณากรอกรหัสประจำสายงาน</label>
+                    <input type="text" id="obj2" name="obj2" class="form-control" placeholder="V8A, V8B, ......" required>
                     <div class="invalid-feedback">
-                        กรอกเลขที่ประจำตัวของคุณ เช่น 101 , 102
+                        กรุณากรอกรหัสประจำสายงานครับ
                     </div>
                 </div>
 
                 <div class="col-12">
                     <label for="obj3"><i class="fa-solid fa-user"></i> ชื่อ-สกุล</label>
-                    <input type="text" id="obj3" name="obj3" class="form-control" placeholder="เช่น สมชาย ใจดี" required>
+                    <input type="text" id="obj3" name="obj3" class="form-control" placeholder="" required>
                     <div class="invalid-feedback">
                         กรอก ชื่อ-สกุลของคุณ
                     </div>
@@ -180,67 +187,53 @@
 
                 <div class="col-12">
                     <label for="obj4"><i class="fa-solid fa-circle-user"></i> ชื่อเล่น</label>
-                    <input type="text" id="obj4" name="obj4" class="form-control" placeholder="กรอกชื่อเล่นของคุณ" required>
+                    <input type="text" id="obj4" name="obj4" class="form-control" placeholder="" required>
                     <div class="invalid-feedback">
                         กรอกชื่อเล่นของคุณ
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="obj5"><i class="fa-solid fa-address-card"></i> ที่อยู่</label>
-                    <input type="text" id="obj5" name="obj5" class="form-control" placeholder="เช่น 191 หมู่ 8 ตำบล ใจกว้าง อำเภอ ใจหาย จังหวัด ใจรัก" required>
+                    <label for="obj5"><i class="fa-solid fa-address-card"></i> จังหวัดที่อยู่อาศัย</label>
+                    <input type="text" id="obj5" name="obj5" class="form-control" placeholder="" required>
                     <div class="invalid-feedback">
                         กรอกที่อยู่ของคุณ
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="obj6"><i class="fa-solid fa-phone"></i> เบอร์โทร</label>
-                    <input type="text" id="obj6" name="obj6" maxlength="10" class="form-control" placeholder="เช่น 0812345678" required>
+                    <label for="obj6"><i class="fa-solid fa-phone"></i> เบอร์โทร(ที่ติดต่อได้)</label>
+                    <input type="text" id="obj6" name="obj6" maxlength="10" class="form-control" placeholder="" required>
                     <div class="invalid-feedback">
                         กรอกเบอร์โทรของคุณ
                     </div>
                 </div>
-
                 <div class="col-12">
-                    <label for="place"><i class="fa-solid fa-envelope"></i> อีเมล์หรือช่องทางติดต่อ</label>
-                    <input type="text" id="place" name="place" class="form-control" placeholder="กรอก Email ของคุณ" required>
+                    <label for="device"><i class="fa-brands fa-line"></i></i> ไอดีไลน์</label>
+                    <input type="text" id="device" name="device" class="form-control" placeholder="" required>
                     <div class="invalid-feedback">
-                        กรอกอีเมล์ของคุณ
+                        กรุณากรอก LINE ID ให้ถูกต้อง
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="name"><i class="fa-solid fa-birthday-cake"></i> วันเดือนปีเกิด</label>
-                    <input type="text" id="name" name="name" class="form-control" placeholder="เช่น 01012540" required>
+                    <label for="place"><i class="fa-solid fa-business-time"></i> อาชีพ</label>
+                    <input type="text" id="place" name="place" class="form-control" placeholder="ก่อนเข้ามาขายออนไลน์" required>
                     <div class="invalid-feedback">
-                        กรอกวันเดือนปีเกิดของคุณ
+                       กรุณากรอกอาชีพเพื่อทำความรู้จักกันมากขึ้นครับ
                     </div>
                 </div>
 
                 <div class="col-12">
-                    <label for="device"><i class="fa-regular fa-circle-user"></i> ศาสนา</label>
-                    <input type="text" id="device" name="device" class="form-control" placeholder="เช่น พุทธ , อิสลาม" required>
+                    <label for="name"><i class="fa-solid fa-users"></i> รหัสสมาชิก</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="รหัสเข้าสู่ระบบ" required>
                     <div class="invalid-feedback">
-                        กรอกศาสนาของคุณ
+                        กรุณากรอกรหัสสมาชิกให้ถูกต้อง
                     </div>
                 </div>
 
-                <div class="col-12">
-                    <label for="problem"><i class="fa-solid fa-home"></i> ที่ทำงานปัจจุบัน</label>
-                    <input type="text" id="problem" name="problem" class="form-control" placeholder="เช่น เลขที่ 171 ถนนพหลโยธิน แขวงบางมด เขตจอมทอง จังหวัด กรุงเทพ" required>
-                    <div class="invalid-feedback">
-                        กรอกที่ทำงานของคุณ
-                    </div>
-                </div>
 
-                <div class="col-12">
-                    <label for="phone"><i class="fa-solid fa-phone"></i> ชื่อและเบอร์โทรผู้ที่ติดต่อได้</label>
-                    <input type="text" id="phone" name="phone" class="form-control" placeholder="เช่น สมชาย ใจดี โทร.0812345678" required>
-                    <div class="invalid-feedback">
-                        กรอกชื่อและเบอร์โทรผู้ที่ติดต่อได้
-                    </div>
-                </div>
+											
 
                 <div class="col-12">
                     <label for="file"><i class="fa-solid fa-file"></i> อัพโหลดรูปประจำตัว</label>
@@ -257,6 +250,7 @@
         </form>
     </div>
 </body>
+
 
 </html>
 
