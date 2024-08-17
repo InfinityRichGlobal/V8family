@@ -69,6 +69,8 @@
         for (const menuName of menus) {
           container.append(`<button class="button" onclick="selectMenu('${menuName}')">${menuName}</button>`);
         }
+      }).fail(function(jqXHR, textStatus, errorThrown) {
+        Swal.fire('ล้มเหลว', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
       });
     }
 
