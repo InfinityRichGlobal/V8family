@@ -5,21 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <link href="https://cdn.jsdelivr.net/gh/maketline/goodday/font/stylesheet.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <title>เลือก Rich Menu</title>
   <style>
     body {
-      font-family: 'line_seed_sans_th', sans-serif;
-      background-color: #f0f2f5;
-    }
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 2rem;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      font-family: 'line_seed_sans_th';
     }
     .loading {
       position: fixed;
@@ -27,7 +17,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -36,21 +26,11 @@
     .loading img {
       width: 80px;
     }
-    .btn {
-      transition: all 0.3s ease;
-    }
-    .btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
   </style>
 </head>
-<body class="bg-gray-100">
-  <div class="flex items-center justify-center min-h-screen p-4">
-    <div class="container">
-      <h1 class="text-3xl font-bold mb-6 text-center text-gray-800">เลือก Rich Menu</h1>
-      <div id="menu-container" class="grid grid-cols-1 gap-4"></div>
-    </div>
+<body>
+  <div id="menu-container" class="flex flex-col items-center justify-center h-screen">
+    <h1 class="text-2xl font-bold mb-4">เลือก Rich Menu</h1>
   </div>
   <div id="loading" class="loading">
     <div class="relative">
@@ -78,60 +58,45 @@
       })
       .catch(err => {
         console.error('LIFF Initialization failed', err);
-        Swal.fire('Error', 'Failed to initialize LIFF. Please try again.', 'error');
       });
     }
 
     function loadRichMenuOptions() {
       $.ajax({
-        url: 'https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec',
+        url: 'https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', // Change this to your Google Apps Script URL
         method: 'GET',
         success: function(data) {
           $('#loading').hide();
           const menus = JSON.parse(data);
           const container = $('#menu-container');
           for (const menuName in menus) {
-            container.append(`<button class="btn bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold text-lg w-full" onclick="selectMenu('${menuName}')">${menuName}</button>`);
+            container.append(`<button class="bg-blue-500 text-white px-4 py-2 mb-2 rounded" onclick="selectMenu('${menuName}')">${menuName}</button>`);
           }
         },
         error: function(jqXHR, textStatus, errorThrown) {
           $('#loading').hide();
-          console.error('Ajax error:', textStatus, errorThrown);
-          Swal.fire('Error', 'Failed to load rich menu options. Please try again.', 'error');
+          Swal.fire('Error', 'Failed to load rich menu options.', 'error');
         }
       });
     }
 
     function selectMenu(menuName) {
-      $('#loading').show();
-      liff.getProfile()
-      .then(profile => {
-        const userId = profile.userId;
-        $.ajax({
-          url: 'https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec',
-          method: 'POST',
-          data: JSON.stringify({ userId: userId, menuName: menuName }),
-          contentType: 'application/json',
-          success: function(response) {
-            $('#loading').hide();
-            const result = JSON.parse(response);
-            if (result.status === 'success') {
-              Swal.fire('Success', 'Rich Menu has been changed successfully.', 'success')
-              .then(() => liff.closeWindow());
-            } else {
-              Swal.fire('Failed', result.message, 'error');
-            }
-          },
-          error: function(jqXHR, textStatus, errorThrown) {
-            $('#loading').hide();
-            console.error('Ajax error:', textStatus, errorThrown);
-            Swal.fire('Failed', 'Failed to connect to the server. Please try again.', 'error');
+      liff.getDecodedIDToken()
+      .then(idToken => {
+        const userId = idToken.sub;
+        $.post('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', JSON.stringify({ userId: userId, menuName: menuName }), function(response) {
+          const result = JSON.parse(response);
+          if (result.status === 'success') {
+            Swal.fire('Success', 'Rich Menu has been changed successfully.', 'success')
+            .then(() => liff.closeWindow());
+          } else {
+            Swal.fire('Failed', result.message, 'error');
           }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+          Swal.fire('Failed', 'Failed to connect to the server.', 'error');
         });
       }).catch(err => {
-        $('#loading').hide();
-        console.error('Error getting user profile', err);
-        Swal.fire('Failed', 'Unable to retrieve user information. Please try again.', 'error');
+        Swal.fire('Failed', 'Unable to retrieve user information.', 'error');
       });
     }
   </script>
