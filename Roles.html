@@ -1,71 +1,84 @@
+
+
+
+
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>เลือก Rich Menu</title>
-    <script src="https://static.line-scdn.net/liff/edge/versions/2.9.0/sdk.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link href="https://cdn.jsdelivr.net/gh/maketline/goodday/font/stylesheet.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      font-family: 'line_seed_sans_th';
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <title>เลือก Rich Menu</title>
 </head>
 <body>
-    <h1>เลือก Rich Menu</h1>
-    <select id="richMenuSelect"></select>
-    <button onclick="changeRichMenu()">เปลี่ยน Rich Menu</button>
+  <div class="flex flex-col items-center justify-center h-screen">
+    <h1 class="text-2xl font-bold mb-4">เลือก Rich Menu</h1>
+    <div id="menu-container" class="flex flex-col items-center">
+      <!-- Rich Menu options will be populated here -->
+    </div>
+  </div>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script>
+    $(document).ready(function () {
+      var liffId = "2006070736-V67dNzeA"; // Change this to your LIFF ID
+      initializeLiff(liffId);
+    });
 
-    <script>
-        let richMenus = {};
+    function initializeLiff(liffId) {
+      liff.init({ liffId: liffId })
+      .then(() => {
+        if (!liff.isLoggedIn()) {
+          liff.login();
+        } else {
+          liff.ready.then(() => {
+            loadRichMenuOptions();
+          });
+        }
+      })
+      .catch(err => {
+        console.error('LIFF Initialization failed', err);
+      });
+    }
 
-        liff.init({ liffId: "2006070736-V67dNzeA" }).then(() => {
-            if (!liff.isLoggedIn()) {
-                liff.login();
-            } else {
-                fetchRichMenus();
-            }
+    function loadRichMenuOptions() {
+      $.get('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', function(data) {
+        const menus = JSON.parse(data);
+        const container = $('#menu-container');
+        for (const menuName in menus) {
+          container.append(`<button class="bg-blue-500 text-white px-4 py-2 mb-2 rounded" onclick="selectMenu('${menuName}')">${menuName}</button>`);
+        }
+      });
+    }
+
+    function selectMenu(menuName) {
+      liff.getDecodedIDToken()
+      .then(idToken => {
+        const userId = idToken.sub;
+        $.post('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', JSON.stringify({ userId: userId, menuName: menuName }), function(response) {
+          const result = JSON.parse(response);
+          if (result.status === 'success') {
+            Swal.fire('สำเร็จ', 'Rich Menu ได้ถูกเปลี่ยนแล้ว', 'success')
+            .then(() => liff.closeWindow());
+          } else {
+            Swal.fire('ล้มเหลว', result.message, 'error');
+          }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+          Swal.fire('ล้มเหลว', 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์', 'error');
         });
-
-        function fetchRichMenus() {
-            fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec')
-                .then(response => response.json())
-                .then(data => {
-                    richMenus = data;
-                    populateRichMenuSelect();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('เกิดข้อผิดพลาดในการโหลดข้อมูล Rich Menu');
-                });
-        }
-
-        function populateRichMenuSelect() {
-            const select = document.getElementById('richMenuSelect');
-            for (const [name, id] of Object.entries(richMenus)) {
-                const option = document.createElement('option');
-                option.value = id;
-                option.textContent = name;
-                select.appendChild(option);
-            }
-        }
-
-        function changeRichMenu() {
-            const richMenuId = document.getElementById('richMenuSelect').value;
-            const userId = liff.getContext().userId;
-
-            fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ userId: userId, richMenuId: richMenuId }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'success') {
-                    alert('เปลี่ยน Rich Menu สำเร็จ');
-                    liff.closeWindow();
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('เกิดข้อผิดพลาด');
-            });
-        }
-    </script>
+      }).catch(err => {
+        Swal.fire('ล้มเหลว', 'ไม่สามารถรับข้อมูลผู้ใช้', 'error');
+      });
+    }
+  </script>
 </body>
 </html>
