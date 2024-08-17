@@ -1,7 +1,5 @@
-
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,6 +12,7 @@
     <!-- jquery@3.6.0 -->
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,10 +32,26 @@
 
         body {
             background-color: white;
+            margin: 0; /* Remove default margin */
+            padding: 0; /* Remove default padding */
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
+        }
+
+        .custom-image {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%; /* Ensure image width is 100% of its container */
+            height: auto; /* Maintain aspect ratio */
+            display: block; /* Remove any extra spacing below the image */
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto; /* Center the container */
+            padding: 0 15px; /* Add padding */
         }
 
         .list {
@@ -44,41 +59,17 @@
             padding: 1.8em 1.2em;
             box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
             border-radius: 0.6em;
-        }
-
-        .qBox {
-            border: solid 2px #525150 !important;
-            padding: 1rem;
-            margin: 0 10px;
-            border-radius: 13px;
-            max-width: 90%;
-            margin: auto;
-        }
-
-        label {
-            color: black;
-        }
-
-        .container {
-            max-width: 600px;
+            margin-top: 20px; /* Add space between image and form */
         }
 
         button[type="submit"] {
             font-family: 'Noto Sans Thai', sans-serif;
-            box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            -moz-box-sizing: border-box;
             width: 100%;
-            margin: 0 auto;
-            margin-top: 10px;
-            padding: 3%;
+            padding: 1em;
             background: #e06666;
             border: none;
             border-radius: 5px;
             font-size: 17px;
-            border-top-style: none;
-            border-right-style: none;
-            border-left-style: none;
             color: #fff;
             cursor: pointer;
         }
@@ -107,11 +98,9 @@
         #button::after {
             content: "\f077";
             font-family: FontAwesome;
-            font-weight: normal;
-            font-style: normal;
             font-size: 2em;
-            line-height: 50px;
             color: #fff;
+            line-height: 50px;
         }
 
         #button:hover {
@@ -127,45 +116,37 @@
             opacity: 1;
             visibility: visible;
         }
-        
-                .custom-image {
 
-            border-radius: 15px;
-
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .navbar-toggler {
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
-        
-        
     </style>
 </head>
-
 <body>
     <a id="button"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+
+    <nav class="navbar navbar-light">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+
     <center>
-        <br />
-        <img src="https://lh3.googleusercontent.com/d/1gi2oy0zl4d3c2FJbdRGzX1K_4K0wTQf1" style="width:600px; height:auto;  "class="custom-image" alt="Custom Image">
-        <div class="form-group mb-2">
-            <label for="searchtext">
-            </label>
-        </div>
+        <img src="https://lh3.googleusercontent.com/d/1gi2oy0zl4d3c2FJbdRGzX1K_4K0wTQf1" class="custom-image" alt="Custom Image">
     </center>
 
     <div class="container list">
         <form id="myForm" class="needs-validation" novalidate>
-            <div class="row justify-content-start g-3">
+            <div class="row g-3">
                 <div class="col-12">
                     <label for="obj1"><i class="fa-solid fa-award"></i> ยินดีต้อนรับสมาชิกทุกท่าน</label>
                     <select id="obj1" name="obj1" class="form-control" required>
-
                         <option value="หลักสูตรทดสอบ">เข้าสู่ ครอบครัวครูส้มโอ ส่งออก AEC</option>
-                        
-                        <!-- เพิ่ม option ตามหลักสูตรที่ต้องการ -->
                     </select>
                     <div class="invalid-feedback">
-                        
+                        กรุณาเลือกหลักสูตร
                     </div>
                 </div>
 
@@ -173,46 +154,47 @@
                     <label for="obj2"><i class="fa-solid fa-users-line"></i> กรุณากรอกรหัสประจำสายงาน</label>
                     <input type="text" id="obj2" name="obj2" class="form-control" placeholder="V8A, V8B, ......" required>
                     <div class="invalid-feedback">
-                        กรุณากรอกรหัสประจำสายงานครับ
+                        กรุณากรอกรหัสประจำสายงาน
                     </div>
                 </div>
 
                 <div class="col-12">
                     <label for="obj3"><i class="fa-solid fa-user"></i> ชื่อ-สกุล</label>
-                    <input type="text" id="obj3" name="obj3" class="form-control" placeholder="" required>
+                    <input type="text" id="obj3" name="obj3" class="form-control" required>
                     <div class="invalid-feedback">
-                        กรอก ชื่อ-สกุลของคุณ
+                        กรุณากรอกชื่อ-สกุลของคุณ
                     </div>
                 </div>
 
                 <div class="col-12">
                     <label for="obj4"><i class="fa-solid fa-circle-user"></i> ชื่อเล่น</label>
-                    <input type="text" id="obj4" name="obj4" class="form-control" placeholder="" required>
+                    <input type="text" id="obj4" name="obj4" class="form-control" required>
                     <div class="invalid-feedback">
-                        กรอกชื่อเล่นของคุณ
+                        กรุณากรอกชื่อเล่นของคุณ
                     </div>
                 </div>
 
                 <div class="col-12">
                     <label for="obj5"><i class="fa-solid fa-address-card"></i> จังหวัดที่อยู่อาศัย</label>
-                    <input type="text" id="obj5" name="obj5" class="form-control" placeholder="" required>
+                    <input type="text" id="obj5" name="obj5" class="form-control" required>
                     <div class="invalid-feedback">
-                        กรอกที่อยู่ของคุณ
+                        กรุณากรอกจังหวัดที่อยู่อาศัยของคุณ
                     </div>
                 </div>
 
                 <div class="col-12">
                     <label for="obj6"><i class="fa-solid fa-phone"></i> เบอร์โทร(ที่ติดต่อได้)</label>
-                    <input type="text" id="obj6" name="obj6" maxlength="10" class="form-control" placeholder="" required>
+                    <input type="text" id="obj6" name="obj6" maxlength="10" class="form-control" required>
                     <div class="invalid-feedback">
-                        กรอกเบอร์โทรของคุณ
+                        กรุณากรอกเบอร์โทรของคุณ
                     </div>
                 </div>
+
                 <div class="col-12">
-                    <label for="device"><i class="fa-brands fa-line"></i></i> ไอดีไลน์</label>
-                    <input type="text" id="device" name="device" class="form-control" placeholder="" required>
+                    <label for="device"><i class="fa-brands fa-line"></i> ไอดีไลน์</label>
+                    <input type="text" id="device" name="device" class="form-control" required>
                     <div class="invalid-feedback">
-                        กรุณากรอก LINE ID ให้ถูกต้อง
+                        กรุณากรอก LINE ID ของคุณ
                     </div>
                 </div>
 
@@ -220,7 +202,7 @@
                     <label for="place"><i class="fa-solid fa-business-time"></i> อาชีพ</label>
                     <input type="text" id="place" name="place" class="form-control" placeholder="ก่อนเข้ามาขายออนไลน์" required>
                     <div class="invalid-feedback">
-                       กรุณากรอกอาชีพเพื่อทำความรู้จักกันมากขึ้นครับ
+                        กรุณากรอกอาชีพของคุณ
                     </div>
                 </div>
 
@@ -232,169 +214,138 @@
                     </div>
                 </div>
 
-
-											
-
                 <div class="col-12">
                     <label for="file"><i class="fa-solid fa-file"></i> อัพโหลดรูปประจำตัว</label>
                     <input type="file" id="file" class="form-control">
                     <div class="invalid-feedback">
-                        อัพโหลดรูปของคุณ
+                        กรุณาอัพโหลดรูปประจำตัวของคุณ
                     </div>
                 </div>
 
                 <div class="col-12 text-center">
-                    <button type="submit" class="btn btn-warning w-100"><i class="bi bi-check-circle-fill"></i>&nbsp;บันทึกข้อมูลของคุณ</button>
+                    <button type="submit" class="btn btn-warning"><i class="bi bi-check-circle-fill"></i>&nbsp;บันทึกข้อมูล</button>
                 </div>
             </div>
         </form>
     </div>
-</body>
 
-
-</html>
-
-<script>
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbxDtaXMje1NYyoTNR_p_RrWjnb0XLPV89l1gVK3-RNk859O5d1Ne0htBwBXZP9yz5UX/exec'; // จุดที่ต้องเปลี่ยน ลิ้งค์ exec ของท่าน
-    var uid;
-    $(document).ready(() => {
-        liff.init({
-            liffId: '2006070736-E86X5JQK', //จุดที่ต้องเปลี่ยนนำ Liff id ของท่านมาใส่
-            withLoginOnExternalBrowser: true
+    <script>
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbxDtaXMje1NYyoTNR_p_RrWjnb0XLPV89l1gVK3-RNk859O5d1Ne0htBwBXZP9yz5UX/exec'; // เปลี่ยนลิงค์นี้ตามต้องการ
+        var uid;
+        $(document).ready(() => {
+            liff.init({
+                liffId: '2006070736-E86X5JQK', // เปลี่ยน Liff ID ของคุณ
+                withLoginOnExternalBrowser: true
+            });
+            liff.ready.then(() => {
+                console.log('liff พร้อมใช้งานแล้ว');
+            });
         });
-        liff.ready.then(() => {
-            console.log('liff พร้อมใช้งานแล้ว');
-        });
-    });
 
-    function submit() {
-        $.LoadingOverlay('show');
+        function submit() {
+            $.LoadingOverlay('show');
 
-        // Read the selected file
-        const fileInput = $('#file')[0];
-        if (fileInput.files.length === 0) {
-            $.LoadingOverlay('hide');
-            alert('Please select a file.');
-            return;
-        }
+            // Read the selected file
+            const fileInput = $('#file')[0];
+            if (fileInput.files.length === 0) {
+                $.LoadingOverlay('hide');
+                alert('กรุณาเลือกไฟล์');
+                return;
+            }
 
-        const file = fileInput.files[0];
-        const fr = new FileReader();
-        fr.onload = function (e) {
-            const base64File = e.target.result.replace(/^.*,/, '');
+            const file = fileInput.files[0];
+            const fr = new FileReader();
+            fr.onload = function (e) {
+                const base64File = e.target.result.replace(/^.*,/, '');
 
-            let data = {
-                opt: 'savedata',
-                uid: liff.getDecodedIDToken().sub,
-                obj1: $('#obj1').val(),
-                obj2: $('#obj2').val(),
-                obj3: $('#obj3').val(),
-                obj4: $('#obj4').val(),
-                obj5: $('#obj5').val(),
-                obj6: $('#obj6').val(),
-                name: $('#name').val(),
-                phone: $('#phone').val(),
-                device: $('#device').val(),
-                problem: $('#problem').val(),
-                place: $('#place').val(),
-                file: base64File, // Add the Base64-encoded file to the data object
-            };
+                let data = {
+                    opt: 'savedata',
+                    uid: liff.getDecodedIDToken().sub,
+                    obj1: $('#obj1').val(),
+                    obj2: $('#obj2').val(),
+                    obj3: $('#obj3').val(),
+                    obj4: $('#obj4').val(),
+                    obj5: $('#obj5').val(),
+                    obj6: $('#obj6').val(),
+                    name: $('#name').val(),
+                    device: $('#device').val(),
+                    place: $('#place').val(),
+                    file: base64File, // Add the Base64-encoded file to the data object
+                };
 
-            // Send the AJAX request with the file data
-            $.ajax({
-                method: "POST",
-                url: scriptUrl,
-                data: data,
-                dataType: 'json',
-                success: function (res) {
-                    $.LoadingOverlay('hide');
-                    if (res.status == 'success') {
-                        // reset the form
-                        $('#myForm')[0].reset();
+                // Send the AJAX request with the file data
+                $.ajax({
+                    method: "POST",
+                    url: scriptUrl,
+                    data: data,
+                    dataType: 'json',
+                    success: function (res) {
+                        $.LoadingOverlay('hide');
+                        if (res.status == 'success') {
+                            $('#myForm')[0].reset();
+                            return Swal.fire({
+                                icon: 'success',
+                                title: 'บันทึกข้อมูลเรียบร้อย',
+                                allowOutsideClick: false,
+                                confirmButtonText: 'ตกลง',
+                            }).then(() => {
+                                liff.closeWindow();
+                            });
+                        }
                         return Swal.fire({
-                            icon: 'success',
-                            title: 'บันทึกข้อมูลเรียบร้อย',
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
                             allowOutsideClick: false,
                             confirmButtonText: 'ตกลง',
-                        }).then(() => {
-                          
-                            liff.closeWindow();
-                            
                         });
-                    }
-                    return Swal.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        allowOutsideClick: false,
-                        confirmButtonText: 'ตกลง',
-                    });
-                },
-                error: function (err) {
-                    console.log(err);
-                    $.LoadingOverlay('hide');
-                    alert('บันทึกข้อมูลไม่สำเร็จ');
-                },
-            });
-        };
-        fr.readAsDataURL(file);
-    }
-</script>
-
-<script>
-    (() => {
-        'use strict'
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll('.needs-validation');
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                event.preventDefault();
-                if (!form.checkValidity()) {
-                    event.stopPropagation();
-                    form.classList.add('was-validated');
-                    $('#myForm').find(":invalid").first().focus();
-                } else {
-                    submit();
-                }
-            }, false);
-        });
-    })();
-</script>
-
-<!-- ปุ่มกลับด้านบน -->
-<script>
-    var btn = $('#button');
-
-    $(window).scroll(function() {
-        if ($(window).scrollTop() > 300) {
-            btn.addClass('show');
-        } else {
-            btn.removeClass('show');
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        $.LoadingOverlay('hide');
+                        alert('บันทึกข้อมูลไม่สำเร็จ');
+                    },
+                });
+            };
+            fr.readAsDataURL(file);
         }
-    });
 
-    btn.on('click', function(e) {
-        e.preventDefault();
-        $('html, body').animate({scrollTop: 0}, '300');
-    });
-</script>
+        (() => {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation');
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    event.preventDefault();
+                    if (!form.checkValidity()) {
+                        event.stopPropagation();
+                        form.classList.add('was-validated');
+                        $('#myForm').find(":invalid").first().focus();
+                    } else {
+                        submit();
+                    }
+                }, false);
+            });
+        })();
 
-  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-    crossorigin="anonymous"></script>
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script
-    src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+        var btn = $('#button');
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > 300) {
+                btn.addClass('show');
+            } else {
+                btn.removeClass('show');
+            }
+        });
 
+        btn.on('click', function(e) {
+            e.preventDefault();
+            $('html, body').animate({scrollTop: 0}, '300');
+        });
+    </script>
 
-  <br />
-
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
 </body>
-
 </html>
-
