@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>เลือก Rich Menu</title>
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.9.0/sdk.js"></script>
+</head>
+<body>
+    <h1>เลือก Rich Menu</h1>
+    <select id="richMenuSelect"></select>
+    <button onclick="changeRichMenu()">เปลี่ยน Rich Menu</button>
+
+    <script>
+        let richMenus = {};
+
+        liff.init({ liffId: "2006070736-V67dNzeA" }).then(() => {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                fetchRichMenus();
+            }
+        });
+
+        function fetchRichMenus() {
+            fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec')
+                .then(response => response.json())
+                .then(data => {
+                    richMenus = data;
+                    populateRichMenuSelect();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการโหลดข้อมูล Rich Menu');
+                });
+        }
+
+        function populateRichMenuSelect() {
+            const select = document.getElementById('richMenuSelect');
+            for (const [name, id] of Object.entries(richMenus)) {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = name;
+                select.appendChild(option);
+            }
+        }
+
+        function changeRichMenu() {
+            const richMenuId = document.getElementById('richMenuSelect').value;
+            const userId = liff.getContext().userId;
+
+            fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: userId, richMenuId: richMenuId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('เปลี่ยน Rich Menu สำเร็จ');
+                    liff.closeWindow();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาด');
+            });
+        }
+    </script>
+</body>
+</html>
