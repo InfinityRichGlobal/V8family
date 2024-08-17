@@ -1,86 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <style type="text/css">
-        body {
-            font-family: 'line_seed_sans_th';
-        }
-    </style>
-    <script src="https://cdn.tailwindcss.com"></script>
     <title>เลือก Rich Menu</title>
+    <script src="https://static.line-scdn.net/liff/edge/versions/2.9.0/sdk.js"></script>
 </head>
 <body>
-    <div id="content" class="flex items-center justify-center h-screen">
-        <div id="richMenuContainer" class="w-full max-w-md p-4 bg-white shadow-md rounded-lg">
-            <h2 class="text-2xl font-bold mb-4 text-center">เลือก Rich Menu</h2>
-            <select id="richMenuSelect" class="form-select w-full">
-                <!-- Rich menu options will be populated here -->
-            </select>
-            <button id="applyButton" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded">Apply</button>
-        </div>
-    </div>
-    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <h1>เลือก Rich Menu</h1>
+    <select id="richMenuSelect"></select>
+    <button onclick="changeRichMenu()">เปลี่ยน Rich Menu</button>
+
     <script>
-        $(document).ready(function () {
-            var liffId = "2006070736-V67dNzeA"; // จุด 1 ที่ต้องเปลี่ยน
-            initializeLiff(liffId);
+        let richMenus = {};
+
+        liff.init({ liffId: "2006070736-V67dNzeA" }).then(() => {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+            } else {
+                fetchRichMenus();
+            }
         });
 
-        function initializeLiff(liffId) {
-            liff.init({
-                liffId: liffId,
-                withLoginOnExternalBrowser: true,
-            })
-            .then(() => {
-                if (!liff.isInClient() && !liff.isLoggedIn()) {
-                    window.alert("กรุณาเข้าสู่ระบบบัญชี LINE ของคุณ");
-                    liff.login({ redirectUri: location.href });
-                }
-                liff.ready.then(() => {
-                    const userId = liff.getDecodedIDToken().sub;
-                    loadRichMenus(userId);
+        function fetchRichMenus() {
+            fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec')
+                .then(response => response.json())
+                .then(data => {
+                    richMenus = data;
+                    populateRichMenuSelect();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('เกิดข้อผิดพลาดในการโหลดข้อมูล Rich Menu');
                 });
-            })
-            .catch((err) => {
-                console.log('LIFF Initialization failed', err);
-            });
         }
 
-        function loadRichMenus(userId) {
-            $.get('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', function (response) {
-                var richMenuSelect = $('#richMenuSelect');
-                richMenuSelect.empty();
-                for (var name in response) {
-                    richMenuSelect.append(new Option(name, response[name]));
-                }
+        function populateRichMenuSelect() {
+            const select = document.getElementById('richMenuSelect');
+            for (const [name, id] of Object.entries(richMenus)) {
+                const option = document.createElement('option');
+                option.value = id;
+                option.textContent = name;
+                select.appendChild(option);
+            }
+        }
 
-                $('#applyButton').click(function () {
-                    var selectedRichMenuName = $('#richMenuSelect').val();
-                    if (selectedRichMenuName) {
-                        $.post('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', 
-                        {
-                            userId: userId, 
-                            richMenuName: selectedRichMenuName
-                        })
-                        .done(function(response) {
-                            if (response.status === 'success') {
-                                Swal.fire('สำเร็จ', 'Rich Menu ถูกเปลี่ยนเรียบร้อยแล้ว', 'success');
-                            } else {
-                                Swal.fire('ข้อผิดพลาด', 'ไม่สามารถเปลี่ยน Rich Menu ได้', 'error');
-                            }
-                        })
-                        .fail(function(error) {
-                            Swal.fire('ข้อผิดพลาด', 'ไม่สามารถติดต่อกับเซิร์ฟเวอร์ได้', 'error');
-                        });
-                    } else {
-                        Swal.fire('ข้อผิดพลาด', 'กรุณาเลือก Rich Menu', 'warning');
-                    }
-                });
+        function changeRichMenu() {
+            const richMenuId = document.getElementById('richMenuSelect').value;
+            const userId = liff.getContext().userId;
+
+            fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: userId, richMenuId: richMenuId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('เปลี่ยน Rich Menu สำเร็จ');
+                    liff.closeWindow();
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('เกิดข้อผิดพลาด');
             });
         }
     </script>
