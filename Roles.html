@@ -55,6 +55,7 @@
     <script>
         let richMenus = {};
 
+        // Initialize LIFF SDK
         liff.init({ liffId: "2006070736-V67dNzeA" }).then(() => {
             if (!liff.isLoggedIn()) {
                 liff.login();
@@ -68,10 +69,13 @@
         function fetchRichMenus() {
             console.log("Fetching Rich Menus...");
             fetch('https://script.google.com/macros/s/AKfycbxQ6zQvkIj-564A1bhecgw9vm7rxNy6xuwTjsrSsNzA1zpv84O5EiFfZH-okxkhViRr/exec', {
+                method: 'GET',
                 mode: 'cors'
             })
             .then(response => {
-                console.log("Response received", response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 return response.json();
             })
             .then(data => {
@@ -87,6 +91,7 @@
 
         function populateRichMenuSelect() {
             const select = document.getElementById('richMenuSelect');
+            select.innerHTML = ''; // Clear previous options
             for (const [name, id] of Object.entries(richMenus)) {
                 const option = document.createElement('option');
                 option.value = id;
@@ -109,7 +114,9 @@
                 body: JSON.stringify({ userId: userId, richMenuId: richMenuId }),
             })
             .then(response => {
-                console.log("Response received", response);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
                 return response.json();
             })
             .then(data => {
