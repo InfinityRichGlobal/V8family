@@ -1,0 +1,280 @@
+"<!DOCTYPE html>
+<html lang=""th"">
+<head>
+    <meta charset=""UTF-8"">
+    <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
+    <title>Ai V8</title>
+    <script charset=""utf-8"" src=""https://static.line-scdn.net/liff/edge/2/sdk.js""></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        body {
+            background-color: #0f0f0f;
+            font-family: 'Poppins', sans-serif;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            background-color: #1a1a1a;
+            border-radius: 10px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        h1 {
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .lead {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #a0a0a0;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+            color: #00ffff;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 5px;
+            border: 1px solid #333333;
+            background-color: #242424;
+            color: #e0e0e0;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 600;
+            text-align: center;
+            vertical-align: middle;
+            user-select: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            color: #000;
+            background-color: #00ffff;
+            border: none;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            font-size: 1.2rem;
+            padding: 16px 28px;
+        }
+
+        .btn-primary:hover {
+            background-color: #00d9d9;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        #previewContainer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #bubblePreview {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+
+        #bubbleContent {
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .group-btn {
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        .group-btn.active {
+            background-color: #00ffff;
+            color: #000000;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class=""container"">
+        <h1>Detail Class Online & Onsite & Tool</h1>
+        <p class=""lead"">เลือกกลุ่มและข้อความที่ต้องการได้เลยครับ</p>
+        <div class=""button-container"">
+            <button class=""btn group-btn active"" data-group=""1"">Online</button>
+            <button class=""btn group-btn"" data-group=""2"">TTS</button>
+            <button class=""btn group-btn"" data-group=""3"">เพิ่มเติม</button>
+        </div>
+        <div class=""form-group"">
+            <label for=""flexSelect"">Select Flex Message:</label>
+            <select class=""form-control"" id=""flexSelect"">
+                <option value=""-1"" selected>-- เลือกข้อความ --</option>
+            </select>
+        </div>
+        <div id=""previewContainer"" style=""display: none;"">
+            <h3>ตัวอย่าง Flex Message:</h3>
+            <div id=""bubblePreview""></div>
+        </div>
+        <div class=""button-container"" style=""margin-top: 20px;"">
+            <button id=""shareBtn"" class=""btn btn-primary btn-lg mt-3"">Share</button>
+        </div>
+        <div class=""button-container"" style=""margin-top: 20px;"">
+            <button id=""reloadBtn"" class=""btn btn-primary btn-lg mt-3"">Reload Data</button>
+        </div>
+        <div id=""errorMessage""></div>
+    </div>
+
+    <script>
+        const LIFF_ID = "2006070736-zDmJ91jY";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8toYcYBHsqFw2M7-OR2NaK6cQMvnQmezOAe-EhxnIXJe6Q_s-Ofd549R8m9di4FE/exec";
+        let flexMessages = [];
+
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                await liff.init({ liffId: LIFF_ID });
+                console.log(""LIFF Initialized"");
+                await fetchFlexMessages();
+            } catch (error) {
+                console.error(""LIFF Initialization failed:"", error);
+                showError(""Failed to initialize LIFF. Please try refreshing the page."");
+            }
+        });
+
+        async function fetchFlexMessages() {
+            try {
+                showError(""""); // Clear any previous error messages
+                const response = await fetch(APPS_SCRIPT_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();
+                if (!Array.isArray(data) || data.length === 0) {
+                    throw new Error(""Invalid data received from server"");
+                }
+                flexMessages = data.map(item => ({
+                    id: item.id,
+                    type: ""flex"",
+                    altText: item.altText,
+                    contents: JSON.parse(item.contents),
+                    group: item.group
+                }));
+                populateDropdown(1); // Load the first group by default
+                console.log(""Flex messages loaded:"", flexMessages);
+            } catch (error) {
+                console.error('Error fetching Flex messages:', error);
+                showError(""Failed to fetch Flex messages. Please try again later."");
+            }
+        }
+
+        function populateDropdown(groupNumber) {
+            const flexSelect = document.getElementById('flexSelect');
+            flexSelect.innerHTML = '<option value=""-1"" selected>-- เลือกข้อความ --</option>';
+            
+            const filteredMessages = flexMessages.filter(msg => parseInt(msg.group) === groupNumber);
+            
+            if (filteredMessages.length === 0) {
+                showError(`No messages found for group ${groupNumber}`);
+            } else {
+                filteredMessages.forEach((flexMessage, index) => {
+                    const option = document.createElement('option');
+                    option.value = flexMessages.indexOf(flexMessage);
+                    option.text = `${flexMessage.id}: ${flexMessage.altText}`;
+                    flexSelect.add(option);
+                });
+            }
+        }
+
+        function updatePreview() {
+            const selectedIndex = document.getElementById('flexSelect').value;
+            const previewContainer = document.getElementById('previewContainer');
+            const bubblePreview = document.getElementById('bubblePreview');
+
+            if (selectedIndex >= 0) {
+                const flexMessage = flexMessages[selectedIndex];
+                previewContainer.style.display = 'block';
+                bubblePreview.innerHTML = createBubbleHTML(flexMessage.contents);
+            } else {
+                previewContainer.style.display = 'none';
+            }
+        }
+
+        function createBubbleHTML(contents) {
+            let html = '<div style=""white-space: pre-wrap;"">';
+            html += JSON.stringify(contents, null, 2);
+            html += '</div>';
+            return html;
+        }
+
+        function showError(message) {
+            const errorElement = document.getElementById('errorMessage');
+            errorElement.textContent = message;
+        }
+
+        document.getElementById('flexSelect').addEventListener('change', updatePreview);
+
+        document.getElementById('shareBtn').addEventListener('click', shareFlexMessage);
+
+        async function shareFlexMessage() {
+            if (!liff.isLoggedIn()) {
+                liff.login();
+                return;
+            }
+
+            const selectedIndex = document.getElementById('flexSelect').value;
+            if (selectedIndex >= 0) {
+                const flexMessage = flexMessages[selectedIndex];
+                try {
+                    await liff.shareTargetPicker([flexMessage]);
+                    console.log('Flex Message shared successfully!');
+                } catch (err) {
+                    console.error('Error sharing Flex Message:', err);
+                    showError('Failed to share Flex Message. Please try again.');
+                }
+            } else {
+                showError('Please select a Flex Message first.');
+            }
+        }
+
+        document.querySelectorAll('.group-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.group-btn').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                populateDropdown(parseInt(this.getAttribute('data-group')));
+            });
+        });
+
+        document.getElementById('reloadBtn').addEventListener('click', fetchFlexMessages);
+    </script>
+</body>
+</html> "
